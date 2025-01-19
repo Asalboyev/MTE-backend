@@ -132,7 +132,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        dd($post);
         $langs = Lang::all();
         $all_categories = PostsCategory::all();
 

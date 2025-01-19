@@ -211,37 +211,6 @@
                         @csrf
                         <div class="row">
                             <div class="col-12">
-                                <!-- <div class="form-group">
-                                    <label for="brand_id" class="form-label">Бранд</label>
-                                    <select class="form-select @error('brand_id') is-invalid @enderror" id="brand_id" name="brand_id">
-                                        @foreach ($brands as $key => $item)
-                                        <option value="{{ $item->id }}" {{ old('brand_id') ?? $product->brand_id == $item->id ? 'selected' : '' }}>{{ $item->title }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('brand_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="price" class="form-label">Цена</label>
-                                    <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price') ?? $product->price }}" id="price" placeholder="...">
-                                    @error('price')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="discount_price" class="form-label">Цена (со скидкой)</label>
-                                    <input type="text" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" value="{{ old('discount_price') ?? $product->discount_price }}" id="discount_price" placeholder="...">
-                                    @error('discount_price')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div> -->
                                 <div class="form-group">
                                     <label for="categories" class="form-label">Категории</label>
                                     <select class="form-control mb-4 @error('categories') is-invalid @enderror" data-choices='{"removeItemButton": true}' multiple name="categories[]">
