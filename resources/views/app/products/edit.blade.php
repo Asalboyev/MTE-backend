@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('links')
-
 <script>
     window.onload = function() {
         var add_post = new Dropzone("div#dropzone", {

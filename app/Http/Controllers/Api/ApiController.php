@@ -217,7 +217,9 @@ class ApiController extends Controller
         ]);
     }
 
-    public function show_post($slug){ // Foydalanuvchi tilini olish
+    public function show_post($slug)
+    {
+        // Foydalanuvchi tilini olish
         $locale = App::getLocale();
 
         // Slug orqali postni olish
@@ -227,27 +229,43 @@ class ApiController extends Controller
             return response()->json(['message' => 'Post not found or URL is not null'], 404);
         }
 
+        // Oldingi postni olish (ID qiymati hozirgi postdan kichik bo'lgan eng oxirgi post)
+        $previousPost = Post::where('id', '<', $post->id)->orderBy('id', 'desc')->first();
+
+        // Keyingi postni olish (ID qiymati hozirgi postdan katta bo'lgan eng birinchi post)
+        $nextPost = Post::where('id', '>', $post->id)->orderBy('id', 'asc')->first();
+
         // Postni foydalanuvchi tiliga moslashtirish
         $translatedPost = [
             'id' => $post->id,
             'title' => $post->title[$locale] ?? null,
             'desc' => $post->desc[$locale] ?? null,
-           'images' => $post->postImages->map(function ($image) {
-            return [
-                'lg' => $image->lg_img, // Katta o'lchamdagi rasm URL
-                'md' => $image->md_img, // O'rta o'lchamdagi rasm URL
-                'sm' => $image->sm_img, // Kichik o'lchamdagi rasm URL
-            ];
+            'images' => $post->postImages->map(function ($image) {
+                return [
+                    'lg' => $image->lg_img, // Katta o'lchamdagi rasm URL
+                    'md' => $image->md_img, // O'rta o'lchamdagi rasm URL
+                    'sm' => $image->sm_img, // Kichik o'lchamdagi rasm URL
+                ];
             })->toArray(),
             'slug' => $post->slug,
             'date' => $post->date,
             'views_count' => $post->views_count,
-            'slug' => $post->slug,
             'meta_keywords' => $post->meta_keywords,
+            // Oldingi post
+            'previous' => $previousPost ? [
+                'name' => $previousPost->title[$locale] ?? null,
+                'slug' => $previousPost->slug,
+            ] : null,
+            // Keyingi post
+            'next' => $nextPost ? [
+                'name' => $nextPost->title[$locale] ?? null,
+                'slug' => $nextPost->slug,
+            ] : null,
         ];
 
         return response()->json($translatedPost);
     }
+
 
 
     public function get_catalogs()
