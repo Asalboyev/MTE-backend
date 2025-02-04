@@ -138,7 +138,7 @@
                                     <div class="tab-pane mt-3 fade {{ $loop->first ? 'show active' : '' }}" id="{{ $lang->code }}" role="tabpanel" aria-labelledby="{{ $lang->code }}-tab">
                                         <div class="form-group">
                                             <label for="title" class="form-label required">Название</label>
-                                            <input type="text" required class="form-control @error('title.'.$lang->code) is-invalid @enderror" name="title[{{ $lang->code }}]" value="{{ old('title') ?? $certificate->title[$lang->code] }}" id="title" placeholder="Название...">
+                                            <input type="text" required class="form-control @error('title.'.$lang->code) is-invalid @enderror" name="title[{{ $lang->code }}]" value="{{ old('title') ?? $certificate->title[$lang->code] ??   null }}" id="title" placeholder="Название...">
                                             @error('title')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -149,7 +149,7 @@
 
                                         <div class="form-group">
                                             <label for="desc" class="form-label">Описание</label>
-                                            <textarea name="desc[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="desc[{{ $lang->code }}]" placeholder="Описание...">{{ old('desc.'.$lang->code) ?? $certificate->desc[$lang->code] }}</textarea>
+                                            <textarea name="desc[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="desc[{{ $lang->code }}]" placeholder="Описание...">{{ old('desc.'.$lang->code) ?? $certificate->desc[$lang->code] ??  null}}</textarea>
                                             @error('desc.'.$lang->code)
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="title" class="form-label required">Slug</label>
-                                    <input type="text" required class="form-control  is-invalid " name="slug" value="{{ old('slug') ?? $certificate->slug }}" id="title" placeholder="slug...">
+                                    <input type="text" required class="form-control  is-invalid " name="slug" value="{{ old('slug') ?? $certificate->slug }} " id="title" placeholder="slug...">
                                     @error('slug')
                                     <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

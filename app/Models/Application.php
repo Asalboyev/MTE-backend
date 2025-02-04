@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
     use HasFactory;
-
+// eskini yangilashi uchun uni topish kerak keyin yangilash kerak model qanday tuzilgan 
     protected $fillable = [
         'name',
         'email',

@@ -13,10 +13,3 @@ Route::get('/', function ()
 
 
 
-
-
-
-
-
-
-
