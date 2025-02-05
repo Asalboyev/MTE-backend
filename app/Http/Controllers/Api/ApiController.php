@@ -451,49 +451,61 @@ class ApiController extends Controller
             return response()->json(['message' => 'Category not found'], 404);
         }
 
+        // Mahsulotlarni 12 ta qilib paginate qilish
+        $paginatedProducts = $category->products()->with('productImages')->paginate(12);
+
         // Kategoriya ma'lumotlarini foydalanuvchi tiliga moslashtirish
         $translatedCategory = [
             'id' => $category->id,
-            'title' => $category->title[$locale] ?? null, // Foydalanuvchi tiliga mos sarlavha
-            'desc' => $category->desc[$locale] ?? null,   // Foydalanuvchi tiliga mos tavsif
+            'title' => $category->title[$locale] ?? null,
+            'desc' => $category->desc[$locale] ?? null,
+            'info' => $category->info[$locale] ?? null,
             'children' => $category->children->map(function ($child) use ($locale) {
                 return [
                     'id' => $child->id,
                     'title' => $child->title[$locale] ?? null,
                     'desc' => $child->desc[$locale] ?? null,
                     'images' => [
-                        'lg' => $child->lg_img, // Katta rasm URL
-                        'md' => $child->md_img, // O'rta rasm URL
-                        'sm' => $child->sm_img, // Kichik rasm URL
+                        'lg' => $child->lg_img,
+                        'md' => $child->md_img,
+                        'sm' => $child->sm_img,
                     ],
                 ];
             }),
             'images' => [
-                'lg' => $category->lg_img, // Katta rasm URL
-                'md' => $category->md_img, // O'rta rasm URL
-                'sm' => $category->sm_img, // Kichik rasm URL
+                'lg' => $category->lg_img,
+                'md' => $category->md_img,
+                'sm' => $category->sm_img,
             ],
             'in_main' => $category->in_main,
             'view' => $category->view,
-            'products' => $category->products->map(function ($product) use ($locale) {
-                return [
-                    'id' => $product->id,
-                    'title' => $product->title[$locale] ?? $product->title, // Mahsulot nomi
-                    'description' => $product->desc[$locale] ?? $product->desc, // Tavsif
-                    'slug' => $product->slug, // Narxi
-                    'images' => $product->productImages->map(function ($image) {
-                        return [
-                            'lg' => $image->lg_img,
-                            'md' => $image->md_img,
-                            'sm' => $image->sm_img,
-                        ];
-                    }),
-                    'meta_keywords' => $product->meta_keywords[$locale] ?? $product->meta_keywords, // Tavsif
-                    'meta_desc' => $product->meta_desc[$locale] ?? $product->meta_desc, // Tavsif
-
-                    'stock' => $product->stock, // Ombordagi qoldiq
-                ];
-            }),
+            'products' => [
+                'data' => $paginatedProducts->map(function ($product) use ($locale) {
+                    return [
+                        'id' => $product->id,
+                        'title' => $product->title[$locale] ?? $product->title,
+                        'description' => $product->desc[$locale] ?? $product->desc,
+                        'description' => $product->desc[$locale] ?? $product->desc,
+                        'slug' => $product->slug,
+                        'images' => $product->productImages->map(function ($image) {
+                            return [
+                                'lg' => $image->lg_img,
+                                'md' => $image->md_img,
+                                'sm' => $image->sm_img,
+                            ];
+                        }),
+                        'meta_keywords' => $product->meta_keywords[$locale] ?? $product->meta_keywords,
+                        'meta_desc' => $product->meta_desc[$locale] ?? $product->meta_desc,
+                        'stock' => $product->stock,
+                    ];
+                }),
+                'pagination' => [
+                    'current_page' => $paginatedProducts->currentPage(),
+                    'last_page' => $paginatedProducts->lastPage(),
+                    'per_page' => $paginatedProducts->perPage(),
+                    'total' => $paginatedProducts->total(),
+                ]
+            ]
         ];
 
         // Ma'lumotlarni JSON formatida qaytarish
@@ -523,7 +535,9 @@ class ApiController extends Controller
             return [
                 'id' => $product->id,
                 'title' => $product->title[$locale] ?? $product->title, // Foydalanuvchi tiliga mos nom
-                'description' => $product->desc[$locale] ?? $product->desc, // Tavsif
+                'description' => $product->desc[$locale] ?? $product->desc, //
+                'info' => $product->info[$locale] ?? $product->info, //
+                // Tavsif
                 // Tavsif
                 'stock' => $product->stock, // Ombordagi qoldiq
                 'images' => $product->productImages->map(function ($image) {
