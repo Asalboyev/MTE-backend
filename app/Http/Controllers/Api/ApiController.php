@@ -459,7 +459,8 @@ class ApiController extends Controller
             'id' => $category->id,
             'title' => $category->title[$locale] ?? null,
             'desc' => $category->desc[$locale] ?? null,
-            'info' => $category->info[$locale] ?? null,
+            'info' => $category->info[$locale] ?? $category->info, //
+
             'children' => $category->children->map(function ($child) use ($locale) {
                 return [
                     'id' => $child->id,
@@ -485,7 +486,7 @@ class ApiController extends Controller
                         'id' => $product->id,
                         'title' => $product->title[$locale] ?? $product->title,
                         'description' => $product->desc[$locale] ?? $product->desc,
-                        'description' => $product->desc[$locale] ?? $product->desc,
+                        'info' => $product->info[$locale] ?? null,
                         'slug' => $product->slug,
                         'images' => $product->productImages->map(function ($image) {
                             return [
