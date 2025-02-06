@@ -591,6 +591,8 @@ class ApiController extends Controller
             'id' => $product->id,
             'title' => $product->title[$locale] ?? $product->title,
             'description' => $product->desc[$locale] ?? $product->desc,
+            'info' => $product->info[$locale] ?? $product->info, //
+
             'stock' => $product->stock,
             'images' => $product->productImages->map(function ($image) {
                 return [
