@@ -173,6 +173,10 @@
                                     <label for="dropzone" class="form-label">Сертификат</label>
                                     <div class="dropzone dropzone-multiple" id="dropzone"></div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="dropzone" class="form-label text-capitalize">файл</label>
+                                    <input type="file" name="file" class="form-control">
+                                </div>
                             </div>
                         </div>
                         <!-- Button -->

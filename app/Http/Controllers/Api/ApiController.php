@@ -296,6 +296,7 @@ class ApiController extends Controller
                     'md' => $certificate->img ? url('/upload/images/600/' . $certificate->img) : null, // O'rtacha o'lchamdagi rasm
                     'sm' => $certificate->img ? url('/upload/images/200/' . $certificate->img) : null, // Kichik o'lchamdagi rasm
                 ],
+                'file' => $certificate->file ? url($certificate->file) : null, // Kichik o'lchamdagi rasm
                 'date' => $certificate->date,
                 'views_count' => $certificate->views_count,
                 'slug' => $certificate->slug,
@@ -336,8 +337,8 @@ class ApiController extends Controller
                 'sm' => $certificate->img ? url('/upload/images/200/' . $certificate->img) : null, // Kichik o'lchamdagi rasm
             ],
             'slug' => $certificate->slug,
+            'file' => $certificate->file ? url($certificate->file) : null, // Kichik o'lchamdagi rasm
         ];
-
         return response()->json($translatedPost);
     }
     // start categories

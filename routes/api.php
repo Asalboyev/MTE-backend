@@ -40,7 +40,4 @@ Route::middleware('locale')->group(function () {
     Route::get('siteinfo', [ApiController::class, 'getCompany']);
     Route::post('/contacts', [ApiController::class, 'store']);
 
-
-
-
 });

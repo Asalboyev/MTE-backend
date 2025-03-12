@@ -51,10 +51,12 @@ class CertificateController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'title.' . $this->main_lang->code => 'required'
+            'title.' . $this->main_lang->code => 'required',
+//            'file' => 'nullable|mimes:pdf,doc,docx|max:5120', // Fayl uchun validatsiya (PDF va Word, 5MB gacha)
         ]);
 
         if ($validator->fails()) {
@@ -73,6 +75,12 @@ class CertificateController extends Controller
 
         // Rasm ma'lumotlarini sozlash
         $data['img'] = $data['dropzone_images'] ?? null;
+
+        // Faylni saqlash
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('certificates', 'public'); // `storage/app/public/certificates`ga saqlaydi
+            $data['file'] = $filePath; // Fayl manzilini ma'lumotlar bazasida saqlash
+        }
 
         Certificate::create($data);
 
@@ -108,7 +116,8 @@ class CertificateController extends Controller
 
         // Validatsiya qilish
         $validator = Validator::make($data, [
-            'title.' . $this->main_lang->code => 'required'
+            'title.' . $this->main_lang->code => 'required',
+            'file' => 'nullable|mimes:pdf,doc,docx|max:5120', // Fayl uchun validatsiya (PDF va Word, 5MB gacha)
         ]);
 
         // Agar validatsiya xatosi bo'lsa, foydalanuvchiga qaytish
@@ -119,10 +128,7 @@ class CertificateController extends Controller
             ]);
         }
 
-        // Rasm mavjud bo'lsa, yangilanadi. Bo'lmasa null bo'ladi
-        $data['img'] = $data['dropzone_images'] ?? null;
-
-        // Sertifikatni topish va yangilash
+        // Sertifikatni topish
         $certificate = Certificate::find($id);
 
         // Agar sertifikat mavjud bo'lmasa, qayta yo'naltirish
@@ -131,6 +137,23 @@ class CertificateController extends Controller
                 'success' => false,
                 'message' => 'Сертификат не найден'
             ]);
+        }
+
+        // Rasmni yangilash (dropzone orqali)
+        $data['img'] = $data['dropzone_images'] ?? $certificate->img;
+
+        // Faylni yuklash va eski faylni o'chirish
+        if ($request->hasFile('file')) {
+            // Eski faylni o'chirish (agar mavjud bo'lsa)
+            if ($certificate->file && Storage::disk('public')->exists($certificate->file)) {
+                Storage::disk('public')->delete($certificate->file);
+            }
+
+            // Yangi faylni saqlash
+            $filePath = $request->file('file')->store('certificates', 'public');
+            $data['file'] = $filePath;
+        } else {
+            $data['file'] = $certificate->file; // Agar fayl yuklanmasa, eski faylni saqlab qolish
         }
 
         // Sertifikatni yangilash
