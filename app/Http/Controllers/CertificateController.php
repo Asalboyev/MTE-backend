@@ -51,12 +51,10 @@ class CertificateController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $data = $request->all();
 
         $validator = Validator::make($data, [
             'title.' . $this->main_lang->code => 'required',
-//            'file' => 'nullable|mimes:pdf,doc,docx|max:5120', // Fayl uchun validatsiya (PDF va Word, 5MB gacha)
         ]);
 
         if ($validator->fails()) {
@@ -76,10 +74,22 @@ class CertificateController extends Controller
         // Rasm ma'lumotlarini sozlash
         $data['img'] = $data['dropzone_images'] ?? null;
 
-        // Faylni saqlash
+        // Faylni `public/certificates` ichida saqlash
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('certificates', 'public'); // `storage/app/public/certificates`ga saqlaydi
-            $data['file'] = $filePath; // Fayl manzilini ma'lumotlar bazasida saqlash
+            $file = $request->file('file');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $filePath = public_path('certificates'); // `public/certificates` katalogi
+
+            // Agar katalog mavjud bo‘lmasa, uni yaratamiz
+            if (!file_exists($filePath)) {
+                mkdir($filePath, 0777, true);
+            }
+
+            // Faylni yuklash
+            $file->move($filePath, $fileName);
+
+            // Fayl manzilini saqlash
+            $data['file'] = 'certificates/' . $fileName;
         }
 
         Certificate::create($data);
@@ -144,16 +154,28 @@ class CertificateController extends Controller
 
         // Faylni yuklash va eski faylni o'chirish
         if ($request->hasFile('file')) {
-            // Eski faylni o'chirish (agar mavjud bo'lsa)
-            if ($certificate->file && Storage::disk('public')->exists($certificate->file)) {
-                Storage::disk('public')->delete($certificate->file);
+            // Eski faylni o‘chirish (agar mavjud bo‘lsa)
+            if ($certificate->file && file_exists(public_path($certificate->file))) {
+                unlink(public_path($certificate->file));
             }
 
             // Yangi faylni saqlash
-            $filePath = $request->file('file')->store('certificates', 'public');
-            $data['file'] = $filePath;
+            $file = $request->file('file');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $filePath = public_path('certificates'); // `public/certificates` katalogi
+
+            // Agar katalog mavjud bo‘lmasa, uni yaratamiz
+            if (!file_exists($filePath)) {
+                mkdir($filePath, 0777, true);
+            }
+
+            // Faylni yuklash
+            $file->move($filePath, $fileName);
+
+            // Fayl manzilini saqlash
+            $data['file'] = 'certificates/' . $fileName;
         } else {
-            $data['file'] = $certificate->file; // Agar fayl yuklanmasa, eski faylni saqlab qolish
+            $data['file'] = $certificate->file; // Agar yangi fayl yuklanmasa, eski faylni saqlab qolish
         }
 
         // Sertifikatni yangilash
@@ -162,7 +184,7 @@ class CertificateController extends Controller
         // Qayta yo'naltirish va muvaffaqiyat xabarini ko'rsatish
         return redirect()->route('catalogs.index')->with([
             'success' => true,
-            'message' => 'Успешно сохранен'
+            'message' => 'Успешно обновлен'
         ]);
     }
 
