@@ -16,13 +16,14 @@ return [
     */
 
 
-        'paths' => ['api/*', 'sanctum/csrf-cookie', 'certificates/*'], // Fayllarga ham ruxsat berish
-        'allowed_methods' => ['*'],
-        'allowed_origins' => ['*'],
-        'allowed_origins_patterns' => [],
-        'allowed_headers' => ['*'],
-        'exposed_headers' => ['Content-Disposition'], // Fayl yuklash uchun kerak
-        'max_age' => 0,
-        'supports_credentials' => false,
-    ];
+    'paths' => ['api/*', 'certificates/*', 'sanctum/csrf-cookie'], // Fayllarga ham ruxsat berish
+    'allowed_methods' => ['*'],
+    'allowed_origins' => ['http://localhost:5173'], // Frontend manzilingiz
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'],
+    'exposed_headers' => ['Content-Disposition'],
+    'max_age' => 0,
+    'supports_credentials' => false,
+
+];
 
