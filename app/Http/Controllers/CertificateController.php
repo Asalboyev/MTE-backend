@@ -17,9 +17,16 @@ class CertificateController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $certificates = Certificate::latest()->paginate(12);
+        $search = $request->input('search'); // Foydalanuvchi kiritgan qidiruv so‘rovi
+        $certificates = Certificate::query();
+
+        if (!empty($search)) {
+            $certificates->where('title', 'like', "%$search%"); // Qidiruvni `title` bo‘yicha amalga oshirish
+        }
+
+        $certificates = $certificates->latest()->paginate(12); // Natijalarni paginatsiya qilish
         $languages = Lang::all();
 
         return view('app.certificates.index', [
@@ -27,7 +34,8 @@ class CertificateController extends Controller
             'route_name' => $this->route_name,
             'route_parameter' => $this->route_parameter,
             'certificates' => $certificates,
-            'languages' => $languages
+            'languages' => $languages,
+            'search' => $search // Qidiruv maydoniga oldingi qiymatni yuborish
         ]);
     }
 

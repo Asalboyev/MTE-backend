@@ -41,7 +41,19 @@
 
 <!-- CARDS -->
 <div class="container-fluid">
+    <div class="search">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route($route_name.'.index') }}" class="d-flex">
+                    <input type="text" class="form-control" name="search" value="{{ $search }}" placeholder="Введите...">
+                    <button type="submit" class="btn btn-success ms-3" style="width: 300px;">Поиск</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="card mt-4">
+
         <div class="card-body">
             <!-- Table -->
             <div class="table-responsive">
