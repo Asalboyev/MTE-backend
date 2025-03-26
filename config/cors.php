@@ -16,14 +16,16 @@ return [
     */
 
 
-    'paths' => ['api/*', 'certificates/*', 'sanctum/csrf-cookie'], // Fayllarga ham ruxsat berish
-    'allowed_methods' => ['*'],
-    'allowed_origins' => ['https://mte.uz/'], // Frontend manzilingiz
-    'allowed_origins_patterns' => [],
-    'allowed_headers' => ['*'],
-    'exposed_headers' => ['Content-Disposition'],
-    'max_age' => 0,
-    'supports_credentials' => false,
+
+        'paths' => ['api/*', 'certificates/*', 'sanctum/csrf-cookie', '*'], // Barcha yo‘llarga ruxsat berish
+        'allowed_methods' => ['*'], // Barcha HTTP metodlariga ruxsat
+        'allowed_origins' => ['*'], // Barcha domenlarga ruxsat
+        'allowed_origins_patterns' => [],
+        'allowed_headers' => ['*'], // Barcha headerlarga ruxsat
+        'exposed_headers' => ['Content-Disposition'], // Fayl yuklab olish uchun kerak
+        'max_age' => 0,
+        'supports_credentials' => true, // Credential'larni qo‘llab-quvvatlash
+
 
 ];
 
