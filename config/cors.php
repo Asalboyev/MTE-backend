@@ -18,7 +18,7 @@ return [
 
     'paths' => ['api/*', 'certificates/*', 'sanctum/csrf-cookie'], // Fayllarga ham ruxsat berish
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:5173'], // Frontend manzilingiz
+    'allowed_origins' => ['https://mte.uz/'], // Frontend manzilingiz
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => ['Content-Disposition'],
