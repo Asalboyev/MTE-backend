@@ -175,8 +175,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="dropzone" class="form-label text-capitalize">файл</label>
+
+                                    <!-- Agar eski fayl mavjud bo‘lsa, uni ko‘rsatish -->
+                                    @if (!empty($old_file))
+                                        <div class="mb-2">
+                                            <p>Oldingi fayl: <a href="{{ asset($old_file) }}" target="_blank">Yuklab olish</a></p>
+                                        </div>
+                                    @endif
+
                                     <input type="file" name="file" class="form-control">
                                 </div>
+
                             </div>
                         </div>
                         <!-- Button -->
