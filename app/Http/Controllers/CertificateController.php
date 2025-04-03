@@ -170,7 +170,7 @@ class CertificateController extends Controller
             ? implode(',', $data['dropzone_images'])
             : $certificate->img;
 
-        // Faylni yuklash va eski faylni o'chirish
+        // Faylni yuklash va eski faylni o‘chirish
         if ($request->hasFile('file')) {
             if ($certificate->file && file_exists(public_path($certificate->file))) {
                 unlink(public_path($certificate->file));
@@ -190,11 +190,12 @@ class CertificateController extends Controller
             $data['file'] = is_string($certificate->file) ? $certificate->file : null;
         }
 
-        // Ma'lumotlar massivida faqat string qiymatlar borligiga ishonch hosil qilish
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $data[$key] = json_encode($value);
-            }
+        // **JSON_ENCODE olib tashlandi** - Laravel `cast` avtomatik qiladi
+        if (!is_array($data['title'])) {
+            return back()->withInput()->with([
+                'success' => false,
+                'message' => 'Ошибка валидации: title должен быть массивом'
+            ]);
         }
 
         // Sertifikatni yangilash
