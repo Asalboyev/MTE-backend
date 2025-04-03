@@ -23,7 +23,7 @@
                 <p class="errorNumber">4</p>
             </div>
             <p class="bigMessageText">Такой страницы не существует :(</p>
-            <div class="button"><a class="buttonLink" href="{{ route('index') }}" aria-label="home">Вернуться на главную страницу</a></div>
+            <div class="button"><a class="buttonLink" href="{{ route('admin') }}" aria-label="home">Вернуться на главную страницу</a></div>
         </div>
     </div>
 </body>
